@@ -39,11 +39,19 @@ def listar_productos(sckt, servicio, data):
 
 def eliminar_producto(sckt, servicio, data):
     crsr = db.cursor()
-    crsr.execute("DELETE FROM producto WHERE id_producto = %s", (data['id_producto'],))
-    db.commit()
-    response = {"respuesta": "OK"}
-    print('Producto eliminado: ', data['id'])
-    enviar(sckt, servicio, json.dumps(response))
+    crsr.execute("SELECT * FROM producto where id = %s", (data['id_producto']))
+    respuesta = crsr.fetchall()
+    if respuesta != None:
+        crsr = db.cursor()
+        crsr.execute("DELETE FROM producto WHERE id_producto = %s", (data['id_producto'],))
+        db.commit()
+        response = {"respuesta": "OK"}
+        print('Producto eliminado: ', data['id_producto'])
+        enviar(sckt, servicio, json.dumps(response))
+    else:
+        response = {"respuesta": "ERROR"}
+        print('Producto no encontrado: ', data['id_producto'])
+        enviar(sckt, servicio, json.dumps(response))
 
 if __name__ == "__main__":
     servicio = 'prodt'

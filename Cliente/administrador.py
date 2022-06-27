@@ -328,7 +328,7 @@ def menu_eliminar_productos():
             print("Producto eliminado con éxito.")
             menu_administrador()
         else:
-            print("No se ha podido eliminar el producto.")
+            print("No se ha encontrado el producto.")
             menu_administrador()
     else:
         print("No se ha podido eliminar el producto.")
