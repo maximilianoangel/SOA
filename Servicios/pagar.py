@@ -30,7 +30,7 @@ def registrar(socket,server):
 
 
 
-def pagar(id,pago,producto):
+def pagar(id,pago,producto,cantidad):
     crsr=db.cursor()
     fetched=None
     fetched1=None
@@ -42,11 +42,11 @@ def pagar(id,pago,producto):
     else:
         crsr.execute("SELECT stock FROM producto WHERE id_producto = %s", (producto,))
         fetched1 = crsr.fetchone()
-        if int(fetched1[0]) == 0:
+        if int(fetched1[0]) == 0 or int(fetched1[0]<int(cantidad)):
             response={"respuesta":"no hay stock del producto"}
             enviar(sckt,server,json.dumps(response))
         else:
-            crsr.execute("UPDATE producto SET stock= %s where id_producto= %s", (int(fetched1[0])-1,producto))
+            crsr.execute("UPDATE producto SET stock= %s where id_producto= %s", (int(fetched1[0])-int(cantidad),producto))
             db.commit()
             crsr.execute("UPDATE usuarios SET saldo= %s where id_usuario= %s", (int(fetched[0])-int(pago),id))
             db.commit()
@@ -69,7 +69,7 @@ if __name__ == "__main__":
         nombre,mensaje=bus(sckt)
         if nombre==server:
             data=json.loads(mensaje)
-            pagar(id=data["id"],pago=data["pago"],producto=data["producto"])
+            pagar(id=data["id"],pago=data["pago"],producto=data["producto"],cantidad=data["cantidad"])
         else:
             response={"respuesta":"servicio incorrecto"}
             enviar(sckt,server,json.dumps(response))
