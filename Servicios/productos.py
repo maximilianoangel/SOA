@@ -39,7 +39,7 @@ def listar_productos(sckt, servicio, data):
 
 def eliminar_producto(sckt, servicio, data):
     crsr = db.cursor()
-    crsr.execute("SELECT * FROM producto where id_producto = %s", (data['id_producto']))
+    crsr.execute("SELECT * FROM producto WHERE id_producto = %s", (data['id_producto']))
     respuesta = crsr.fetchall()
     if respuesta != None:
         crsr = db.cursor()
