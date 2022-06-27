@@ -13,23 +13,12 @@ def enviar(sckt, srv, arg):
     sckt.sendall(T.encode())
 
 def bus(sckt):
-    amntRcvd = 0
-    sT = None
-    msgT = ''
-
-    while True:
-        data = sckt.recv(4096)
-        if amntRcvd == 0:
-            sT = int(data[:5].decode())
-            nameSrv = data[5:10].decode()
-            msgT = msgT + data[10:].decode()
-            amntRcvd = amntRcvd + len(data)-5
-        else:
-            msgT = msgT + data.decode()
-            amntRcvd = amntRcvd + len(data)
-        if amntRcvd >= sT:
-            break
+    msgT=''
+    data=sckt.recv(4096)
+    nameSrv = data[5:10].decode()
+    msgT = msgT + data[10:].decode()
     return nameSrv, msgT
+
 
 def registrar(socket,server):
     enviar(socket,'sinit',server)
