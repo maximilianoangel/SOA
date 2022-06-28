@@ -1,5 +1,6 @@
 import socket, sys, json
 from os import system, name
+from Cliente.clienteC import ID_usuario
 from SOA.Servicios.pagar import enviar,bus
 
 
@@ -48,7 +49,7 @@ def menu_cliente():
     elif opcion == 2:
         menu_eliminar_productos_carrito()
     elif opcion == 3:
-        print("Funcion Pagar")
+        realizar_pago()
     elif opcion == 4:
         print("Saliendo...")
         sys.exit()
@@ -57,8 +58,9 @@ def menu_cliente():
         menu_cliente()
 
 
-def realizar_pago(ID,pago,id_producto,cantidad):
-    arg={"id":ID,"pago":pago,"producto":id_producto,"cantidad":cantidad}
+def realizar_pago():
+    global ID_usuario
+    arg={"id":ID_usuario,"pago":pago,"producto":id_producto,"cantidad":cantidad}
     enviar(sckt, servicio3, arg)
     nombre_servicio, mensaje = escuchar(sckt)
     mensaje = json.loads(mensaje[12:])

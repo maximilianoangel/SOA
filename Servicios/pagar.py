@@ -31,28 +31,42 @@ def registrar(socket,server):
 
 
 def pagar(id,pago,producto,cantidad):
-    crsr=db.cursor()
+    i=0
+    exito=0
     fetched=None
-    fetched1=None
+    crsr=db.cursor()
     crsr.execute("SELECT saldo FROM usuarios WHERE id_usuario = %s", (id,))
     fetched = crsr.fetchone()
-    if int(fetched[0]) < int(pago):
-        response= {"respuesta ":" Saldo insuficiente"}
+    while i<len(producto):
+        crsr=db.cursor()
+        fetched1=None
+        prod=int(producto[i])
+        cant=int(cantidad[i])
+        if int(fetched[0]) < int(pago):
+            exito=0
+            response= {"respuesta ":" Saldo insuficiente"}
+            break
+        else:
+            crsr.execute("SELECT stock FROM producto WHERE id_producto = %s", (prod,))
+            fetched1 = crsr.fetchone()
+            if int(fetched1[0]) == 0 or int(fetched1[0]<int(cantidad)):
+                exito=0
+                response={"respuesta":"no hay stock del producto"}
+                break
+            else:
+                crsr.execute("UPDATE producto SET stock= %s where id_producto= %s", (int(fetched1[0])-int(cant),prod))
+                db.commit()
+                exito=1
+                response={"respuesta":"Pago realizado con exito!"}
+        i=i+1
+    if exito==1:
+        crsr.execute("UPDATE usuarios SET saldo= %s where id_usuario= %s", (int(fetched[0])-int(pago),id))
+        db.commit()
+        print("Se ah realizado el pago con exito!")
         enviar(sckt,server,json.dumps(response))
     else:
-        crsr.execute("SELECT stock FROM producto WHERE id_producto = %s", (producto,))
-        fetched1 = crsr.fetchone()
-        if int(fetched1[0]) == 0 or int(fetched1[0]<int(cantidad)):
-            response={"respuesta":"no hay stock del producto"}
-            enviar(sckt,server,json.dumps(response))
-        else:
-            crsr.execute("UPDATE producto SET stock= %s where id_producto= %s", (int(fetched1[0])-int(cantidad),producto))
-            db.commit()
-            crsr.execute("UPDATE usuarios SET saldo= %s where id_usuario= %s", (int(fetched[0])-int(pago),id))
-            db.commit()
-            print("Se ah realizado el pago con exito!")
-            response={"respuesta":"Pago realizado con exito!"}
-            enviar(sckt,server,json.dumps(response))
+        print("Pago rechazado")
+        enviar(sckt,server,json.dumps(response))
 
 
 if __name__ == "__main__":
