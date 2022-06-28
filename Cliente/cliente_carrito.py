@@ -4,7 +4,7 @@ from SOA.Servicios.pagar import enviar,bus
 
 
 servicio1 = 'carri'
-servicio2 = 'pagos'
+servicio2 = 'bcart'
 servicio3= 'pagar'
 
 def enviar(sckt, servicio, arg):
@@ -62,7 +62,10 @@ def realizar_pago(ID,pago,id_producto,cantidad):
     enviar(sckt, servicio3, arg)
     nombre_servicio, mensaje = escuchar(sckt)
     mensaje = json.loads(mensaje[12:])
-    if
+    if mensaje["respuesta"] == 'Pago realizado con exito!':
+        print("Pago realizado con exito")
+    else:
+        print("No se pudo completar el pago")
 
 
 def menu_listar_productos():
