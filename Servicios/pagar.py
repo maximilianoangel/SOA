@@ -42,6 +42,8 @@ def pagar(id,pago,producto,cantidad):
     crsr.execute("SELECT saldo FROM usuarios WHERE id_usuario = %s", (id,))
     fetched = crsr.fetchone()
     while i<len(producto):
+        print("id producto: "+str(producto[i]))
+        print("cantidad: "+str(cantidad[i]))
         crsr=db.cursor()
         fetched1=None
         prod=int(producto[i])

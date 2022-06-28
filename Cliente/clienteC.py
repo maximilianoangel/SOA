@@ -215,7 +215,7 @@ def realizar_pago():
     if nombre_servicio == servicio2:
         if mensaje["respuesta"] == 'OK':
             for i in mensaje["productos"]:
-                productos.append(int(i[0]))
+                productos.append(int(i[2]))
                 cantidad.append(int(i[3]))
                 Tot=Tot+int(i[4])
         else:
