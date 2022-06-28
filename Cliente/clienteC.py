@@ -253,7 +253,7 @@ def menu_listar_productos():
         menu_cliente()
 
 def menu_agregar_producto():
-    id_orden = 1
+    
     id_producto = None
     cantidad = None
     subtotal = 0
@@ -302,7 +302,7 @@ def menu_agregar_producto():
                 print("Subtotal: ", mensaje["subtotal"])
                 subtotal=mensaje["subtotal"]
                 Total=Total+int(subtotal)
-                arg={"opcion": "agregar","id_orden": id_orden, "id_producto": id_producto, "cantidad": cantidad, "subtotal": subtotal, "id_usuario": int(ID_usuario)}
+                arg={"opcion": "agregar", "id_producto": id_producto, "cantidad": cantidad, "subtotal": subtotal, "id_usuario": int(ID_usuario)}
                 arg = json.dumps(arg)
                 enviar(sckt, servicio2, arg)
                 nombre_servicio, mensaje = escuchar(sckt)
@@ -349,7 +349,7 @@ def menu_eliminar_productos_carrito():
         print("No se ha podido listar los productos.")
         menu_cliente()
 
-    id_orden=1
+    
     menu = """
     *********************************************************
     *Modo usuario                                           *
@@ -367,7 +367,7 @@ def menu_eliminar_productos_carrito():
     
     Cantidad: """
     cantidad = input(menu1)
-    arg = {"opcion": "eliminar","id_orden":id_orden ,"id_producto": id_producto, "cantidad": cantidad}
+    arg = {"opcion": "eliminar","id_usuario":ID_usuario ,"id_producto": id_producto, "cantidad": cantidad}
     arg = json.dumps(arg)
     enviar(sckt, servicio2, arg)
     nombre_servicio, mensaje = escuchar(sckt)

@@ -81,7 +81,10 @@ def listar_productos(sckt, servicio, data):
 #Ver productos en orden_producto
 def ver_productos_orden(sckt, servicio, data):
     crsr = db.cursor()
-    crsr.execute("SELECT * FROM `orden_producto` WHERE `id_orden` = %s", (data['id_orden'],))
+    crsr.execute("SELECT id_orden FROM Orden WHERE id_usuario = %s AND estado = 'por pagar'", (data['id_usuario'],))
+    id_orden = crsr.fetchone()
+    crsr = db.cursor()
+    crsr.execute("SELECT * FROM `orden_producto` WHERE `id_orden` = %s", (id_orden,))
     respuesta = crsr.fetchall()
     Nrespuesta = {"respuesta": "OK", "productos": respuesta}
     enviar(sckt, servicio, json.dumps(Nrespuesta))
@@ -90,7 +93,10 @@ def ver_productos_orden(sckt, servicio, data):
 #Ver productos de orden_producto
 def ver_productos(sckt, servicio, data):
     crsr = db.cursor()
-    crsr.execute("SELECT * FROM `orden_producto` WHERE `id_orden` = %s", (data['id_orden'],))
+    crsr.execute("SELECT id_orden FROM Orden WHERE id_usuario = %s AND estado = 'por pagar'", (data['id_usuario'],))
+    id_orden = crsr.fetchone()
+    crsr = db.cursor()
+    crsr.execute("SELECT * FROM `orden_producto` WHERE `id_orden` = %s", (id_orden,))
     respuesta = crsr.fetchall()
     Nrespuesta = {"respuesta": "OK", "productos": respuesta}
     enviar(sckt, servicio, json.dumps(Nrespuesta))
@@ -100,7 +106,10 @@ def ver_productos(sckt, servicio, data):
 
 def eliminar_producto(sckt, servicio, data):
     crsr = db.cursor()
-    crsr.execute("DELETE FROM `orden_producto` WHERE `id_orden` = %s AND `id_producto` = %s AND `cantidad` = %s", (data['id_orden'], data['id_producto'], data['cantidad']))
+    crsr.execute("SELECT id_orden FROM Orden WHERE id_usuario = %s AND estado = 'por pagar'", (data['id_usuario'],))
+    id_orden = crsr.fetchone()
+    crsr = db.cursor()
+    crsr.execute("DELETE FROM `orden_producto` WHERE `id_orden` = %s AND `id_producto` = %s AND `cantidad` = %s", (id_orden, data['id_producto'], data['cantidad']))
     db.commit()
     response ={"respuesta": "OK"}
     print('Producto eliminado de la orden: ', data['id_producto'])
