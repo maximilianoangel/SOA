@@ -71,6 +71,7 @@ def pagar(id,pago,producto,cantidad):
         crsr.execute("UPDATE usuarios SET saldo= %s where id_usuario= %s", (int(fetched[0])-int(pago),id))
         db.commit()
         crsr.execute("UPDATE Orden SET estado= %s where id_orden= %s", ("pagado",int(id_orden[0])))
+        db.commit()
         print("Se ah realizado el pago con exito!")
         enviar(sckt,server,json.dumps(response))
     else:
