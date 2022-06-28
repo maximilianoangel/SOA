@@ -202,6 +202,11 @@ def realizar_pago():
     global Total
     productos=[]
     cantidad=[]
+    Tot=0
+    arg = {"opcion": "listar1","id_usuario":ID_usuario}
+    arg = json.dumps(arg)
+    enviar(sckt, servicio2, arg)
+    nombre_servicio, mensaje = escuchar(sckt)
     arg = {"opcion": "listar1","id_usuario":ID_usuario}
     arg = json.dumps(arg)
     enviar(sckt, servicio2, arg)
@@ -212,10 +217,11 @@ def realizar_pago():
             for i in mensaje["productos"]:
                 productos.append(int(i[0]))
                 cantidad.append(int(i[3]))
+                Tot=Tot+int(i[4])
         else:
             print("Carrito vacio")
             menu_cliente()
-    arg={"id":ID_usuario,"pago":Total,"producto":productos,"cantidad":cantidad}
+    arg={"id":ID_usuario,"pago":Tot,"producto":productos,"cantidad":cantidad}
     arg = json.dumps(arg)
     enviar(sckt, servicio3, arg)
     nombre_servicio, mensaje = escuchar(sckt)
