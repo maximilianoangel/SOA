@@ -5,6 +5,7 @@ from os import system, name
 servicio1 = 'carri'
 servicio2 = 'bcart'
 servicio3= 'pagar'
+servicio4='sensn'
 ID_usuario = ''
 Total =0
 
@@ -104,10 +105,10 @@ def menu_registro_usuario():
     yn = yn.lower()
     if yn == 'y' or yn == 'yes' or yn == 's' or yn == 'si':
         arg = {"nombre": nombre, "correo": correo, "password": password, 'saldo': '0', 'tipo': tipo, 'opcion': 'registrar' }
-        enviar(sckt, servicio1, json.dumps(arg))
+        enviar(sckt, servicio4, json.dumps(arg))
         nombre_servicio, mensaje = escuchar(sckt)
         mensaje = json.loads(mensaje[12:])
-        if nombre_servicio == servicio1:
+        if nombre_servicio == servicio4:
             if mensaje["respuesta"] == 'OK':
                 print("Usuario registrado con éxito.")
                 menu_inicial()
@@ -146,17 +147,18 @@ def menu_inicio_sesion():
 
     arg = {"correo": correo, "password": password, "tipo": "cliente", 'opcion': 'login'}
     arg = json.dumps(arg)
-    enviar(sckt, servicio1, arg)
+    enviar(sckt, servicio4, arg)
     nombre_servicio, mensaje = escuchar(sckt)
     mensaje = json.loads(mensaje[12:])
-    if nombre_servicio == servicio1:
+    if nombre_servicio == servicio4:
+        print(mensaje)
         if mensaje["respuesta"] == "ERROR":
             print("No se ha podido iniciar sesión.")
             menu_inicio_sesion() 
         else:
             arg = {"correo": correo, "tipo": "cliente", 'opcion': 'id'}
             arg = json.dumps(arg)
-            enviar(sckt, servicio1, arg)
+            enviar(sckt, servicio4, arg)
             nombre_servicio, mensaje = escuchar(sckt)
             mensaje = json.loads(mensaje[12:])
             ID_usuario = mensaje["id"]
@@ -186,6 +188,10 @@ def menu_cliente():
         realizar_pago()
     elif opcion == 4:
         print("Saliendo...")
+    elif opcion == 5:
+        global Total
+        Total=100
+        realizar_pago()
     else:
         print('Opcion no valida')
         menu_cliente()

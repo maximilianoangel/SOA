@@ -48,7 +48,7 @@ def id(sckt, servicio, data):
     crsr = db.cursor()
     crsr.execute("SELECT id_usuario FROM `usuarios` WHERE `correo` LIKE %s", (data['correo'],))
     respuesta = crsr.fetchone()
-    if len(respuesta) == 0:
+    if len(respuesta) != 0:
         response = {"respuesta": "OK", "id": respuesta[0]}
         print('ID obtenido: ', respuesta[0])
         enviar(sckt, servicio, json.dumps(response))

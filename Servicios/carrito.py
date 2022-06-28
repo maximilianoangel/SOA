@@ -41,22 +41,28 @@ def escuchar(sckt):
 #Agregar productos a la base de datos orden_producto
 def agregar_producto(sckt,servicio, data):
     crsr = db.cursor()
-    crsr.execute("SELECT * FROM Orden WHERE id_usuario = %s", (data['id_usuario'],))
+    crsr.execute("SELECT * FROM Orden WHERE id_usuario = %s AND estado = 'por pagar'", (data['id_usuario'],))
     respuesta = crsr.fetchall()
     print(respuesta)
     if len(respuesta) == 0:
-        crsr = db.cursor()    
+        crsr = db.cursor()
         crsr.execute("INSERT INTO Orden (id_usuario,estado,total) VALUES (%s,'por pagar',%s)", (data['id_usuario'],data['subtotal']))
         db.commit()
         crsr = db.cursor()
-        crsr.execute("INSERT INTO orden_producto (id_orden, id_producto,cantidad,subtotal) VALUES (%s, %s,%s,%s)", (data['id_orden'], data['id_producto'],data['cantidad'],data['subtotal']))
+        crsr.execute("SELECT id_orden FROM Orden WHERE id_usuario = %s AND estado = 'por pagar'", (data['id_usuario'],))
+        id_orden = crsr.fetchone()
+        crsr = db.cursor()
+        crsr.execute("INSERT INTO orden_producto (id_orden, id_producto,cantidad,subtotal) VALUES (%s, %s,%s,%s)", (id_orden, data['id_producto'],data['cantidad'],data['subtotal']))
         db.commit()
     else:
         crsr = db.cursor()
-        crsr.execute("UPDATE Orden SET total = total + %s WHERE id_usuario = %s", (data['subtotal'],data['id_usuario']))
+        crsr.execute("UPDATE Orden SET total = total + %s WHERE id_usuario = %s AND estado = 'por pagar'", (data['subtotal'],data['id_usuario']))
         db.commit()
         crsr = db.cursor()
-        crsr.execute("INSERT INTO orden_producto (id_orden,id_producto,cantidad,subtotal) VALUES (%s, %s,%s,%s)", (data['id_orden'], data['id_producto'],data['cantidad'],data['subtotal']))
+        crsr.execute("SELECT id_orden FROM Orden WHERE id_usuario = %s AND estado = 'por pagar'", (data['id_usuario'],))
+        id_orden = crsr.fetchone()
+        crsr = db.cursor()
+        crsr.execute("INSERT INTO orden_producto (id_orden,id_producto,cantidad,subtotal) VALUES (%s, %s,%s,%s)", (id_orden,data['id_producto'],data['cantidad'],data['subtotal']))
         db.commit()
     response ={"respuesta": "OK"}
     print('Producto agregado a la orden.')
