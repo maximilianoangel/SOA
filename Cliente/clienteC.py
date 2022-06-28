@@ -53,11 +53,12 @@ def menu_registro_usuario():
     nombre = None
     correo = None
     password = None
+    saldo = None
     tipo = 'cliente'
 
     menu1 = """
     ***************************************
-    * Usuario administrador               *
+    * Usuario cliente                     *
     *-------------------------------------*
     * Registro de usuario                 *
     * Ingresar nombre de usuario          *
@@ -68,7 +69,7 @@ def menu_registro_usuario():
 
     menu2 = """
     ***************************************
-    * Usuario administrador               *
+    * Usuario cliente                     *
     *-------------------------------------*
     * Registro de correo                  *
     * Ingresar su correo                  *
@@ -79,7 +80,7 @@ def menu_registro_usuario():
 
     menu2 = """
     ***************************************
-    * Usuario administrador               *
+    * Usuario cliente                     *
     *-------------------------------------*
     * Registro de usuario                 *
     * Ingresar contraseña                 *
@@ -88,9 +89,20 @@ def menu_registro_usuario():
     Contraseña: """
     password = input(menu2)
 
+    menu4 = """
+    ***************************************
+    * Usuario cliente                     *
+    *-------------------------------------*
+    * Registro de usuario                 *
+    * Ingresar Saldo                      *
+    ***************************************
+    
+    Saldo: """
+    saldo = input(menu4)
+
     menu3 = f"""
     ***************************************
-    * Usuario administrador               *
+    * Usuario cliente                     *
     *-------------------------------------*
     * Registro de usuario                 *
     * Confirme sus datos [y/n]            *
@@ -99,12 +111,13 @@ def menu_registro_usuario():
     Usuario: {nombre}
     Correo: {correo}
     Contraseña: {password}
+    Saldo: {saldo}
     
     Opción: """
     yn = input(menu3)
     yn = yn.lower()
     if yn == 'y' or yn == 'yes' or yn == 's' or yn == 'si':
-        arg = {"nombre": nombre, "correo": correo, "password": password, 'saldo': '0', 'tipo': tipo, 'opcion': 'registrar' }
+        arg = {"nombre": nombre, "correo": correo, "password": password, 'saldo': saldo, 'tipo': tipo, 'opcion': 'registrar' }
         enviar(sckt, servicio4, json.dumps(arg))
         nombre_servicio, mensaje = escuchar(sckt)
         mensaje = json.loads(mensaje[12:])
