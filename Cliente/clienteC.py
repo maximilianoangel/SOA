@@ -252,6 +252,7 @@ def menu_agregar_producto():
     cantidad = None
     subtotal = 0
     global Total
+    global ID_usuario
 
     menu1 = """
     *********************************************************
@@ -295,7 +296,7 @@ def menu_agregar_producto():
                 print("Subtotal: ", mensaje["subtotal"])
                 subtotal=mensaje["subtotal"]
                 Total=Total+int(subtotal)
-                arg={"opcion": "agregar","id_orden": id_orden, "id_producto": id_producto, "cantidad": cantidad, "subtotal": subtotal, "id_usuario": 1}
+                arg={"opcion": "agregar","id_orden": id_orden, "id_producto": id_producto, "cantidad": cantidad, "subtotal": subtotal, "id_usuario": int(ID_usuario)}
                 arg = json.dumps(arg)
                 enviar(sckt, servicio2, arg)
                 nombre_servicio, mensaje = escuchar(sckt)
