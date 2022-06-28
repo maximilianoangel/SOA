@@ -32,8 +32,12 @@ def registrar(socket,server):
 
 def pagar(id,pago,producto,cantidad):
     i=0
+    j=0
     exito=0
     fetched=None
+    crsr = db.cursor()
+    crsr.execute("SELECT id_orden FROM Orden WHERE id_usuario = %s AND estado = 'por pagar'", (id,))
+    id_orden = crsr.fetchone()
     crsr=db.cursor()
     crsr.execute("SELECT saldo FROM usuarios WHERE id_usuario = %s", (id,))
     fetched = crsr.fetchone()
@@ -49,23 +53,30 @@ def pagar(id,pago,producto,cantidad):
         else:
             crsr.execute("SELECT stock FROM producto WHERE id_producto = %s", (prod,))
             fetched1 = crsr.fetchone()
-            if int(fetched1[0]) == 0 or int(fetched1[0]<int(cantidad)):
+            if int(fetched1[0]) == 0 or int(fetched1[0]<int(cant)):
                 exito=0
                 response={"respuesta":"no hay stock del producto"}
                 break
             else:
-                crsr.execute("UPDATE producto SET stock= %s where id_producto= %s", (int(fetched1[0])-int(cant),prod))
-                db.commit()
                 exito=1
                 response={"respuesta":"Pago realizado con exito!"}
         i=i+1
     if exito==1:
+        while j<len(producto):
+            prod=int(producto[j])
+            cant=int(cantidad[j])
+            crsr.execute("UPDATE producto SET stock= %s where id_producto= %s", (int(fetched1[0])-int(cant),prod))
+            db.commit()
+            j=j+1
         crsr.execute("UPDATE usuarios SET saldo= %s where id_usuario= %s", (int(fetched[0])-int(pago),id))
         db.commit()
+        crsr.execute("UPDATE Orden SET estado= %s where id_orden= %s", ("pagado",int(id_orden[0])))
         print("Se ah realizado el pago con exito!")
         enviar(sckt,server,json.dumps(response))
     else:
         print("Pago rechazado")
+        print(response)
+        print("Total: "+str(pago))
         enviar(sckt,server,json.dumps(response))
 
 

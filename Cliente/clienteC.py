@@ -202,7 +202,7 @@ def realizar_pago():
     global Total
     productos=[]
     cantidad=[]
-    arg = {"opcion": "listar1"}
+    arg = {"opcion": "listar1","id_usuario":ID_usuario}
     arg = json.dumps(arg)
     enviar(sckt, servicio2, arg)
     nombre_servicio, mensaje = escuchar(sckt)
@@ -216,6 +216,7 @@ def realizar_pago():
             print("Carrito vacio")
             menu_cliente()
     arg={"id":ID_usuario,"pago":Total,"producto":productos,"cantidad":cantidad}
+    arg = json.dumps(arg)
     enviar(sckt, servicio3, arg)
     nombre_servicio, mensaje = escuchar(sckt)
     mensaje = json.loads(mensaje[12:])
@@ -325,7 +326,7 @@ def menu_agregar_producto():
 
 
 def menu_eliminar_productos_carrito():
-    arg = {"opcion": "listar1"}
+    arg = {"opcion": "listar1","id_usuario":ID_usuario}
     arg = json.dumps(arg)
     enviar(sckt, servicio2, arg)
     nombre_servicio, mensaje = escuchar(sckt)

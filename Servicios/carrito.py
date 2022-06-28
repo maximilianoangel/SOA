@@ -84,7 +84,7 @@ def ver_productos_orden(sckt, servicio, data):
     crsr.execute("SELECT id_orden FROM Orden WHERE id_usuario = %s AND estado = 'por pagar'", (data['id_usuario'],))
     id_orden = crsr.fetchone()
     crsr = db.cursor()
-    crsr.execute("SELECT * FROM `orden_producto` WHERE `id_orden` = %s", (id_orden,))
+    crsr.execute("SELECT * FROM `orden_producto` WHERE `id_orden` = %s", (int(id_orden[0]),))
     respuesta = crsr.fetchall()
     Nrespuesta = {"respuesta": "OK", "productos": respuesta}
     enviar(sckt, servicio, json.dumps(Nrespuesta))
@@ -96,7 +96,7 @@ def ver_productos(sckt, servicio, data):
     crsr.execute("SELECT id_orden FROM Orden WHERE id_usuario = %s AND estado = 'por pagar'", (data['id_usuario'],))
     id_orden = crsr.fetchone()
     crsr = db.cursor()
-    crsr.execute("SELECT * FROM `orden_producto` WHERE `id_orden` = %s", (id_orden,))
+    crsr.execute("SELECT * FROM `orden_producto` WHERE `id_orden` = %s", (int(id_orden[0]),))
     respuesta = crsr.fetchall()
     Nrespuesta = {"respuesta": "OK", "productos": respuesta}
     enviar(sckt, servicio, json.dumps(Nrespuesta))
@@ -109,7 +109,7 @@ def eliminar_producto(sckt, servicio, data):
     crsr.execute("SELECT id_orden FROM Orden WHERE id_usuario = %s AND estado = 'por pagar'", (data['id_usuario'],))
     id_orden = crsr.fetchone()
     crsr = db.cursor()
-    crsr.execute("DELETE FROM `orden_producto` WHERE `id_orden` = %s AND `id_producto` = %s AND `cantidad` = %s", (id_orden, data['id_producto'], data['cantidad']))
+    crsr.execute("DELETE FROM `orden_producto` WHERE `id_orden` = %s AND `id_producto` = %s AND `cantidad` = %s", (int(id_orden[0]), data['id_producto'], data['cantidad']))
     db.commit()
     response ={"respuesta": "OK"}
     print('Producto eliminado de la orden: ', data['id_producto'])
