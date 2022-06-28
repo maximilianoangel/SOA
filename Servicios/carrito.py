@@ -142,7 +142,7 @@ def buscar_id_producto(nombre):
 
 
 if __name__=="__main__":
-    servicio = 'pagos'
+    servicio = 'bcart'
     try:
         sckt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_address = ('localhost', 5000)
@@ -150,7 +150,7 @@ if __name__=="__main__":
         sckt.connect(server_address)
         print('Conectado')
         print('Se está registrando el servicio')
-        sckt.send(b'00010sinitpagos')
+        sckt.send(b'00010sinitbcart')
         print('Servicio registrado')
         data = sckt.recv(4096)
         datos = data.decode('utf-8')

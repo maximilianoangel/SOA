@@ -6,12 +6,11 @@ sckt=None
 
 
 def realizar_pago(ID,pago,id_producto,cantidad):
-    print("apunto de enviar la informacion del pago!")
-    arg={"id":ID,"pago":pago,"producto":id_producto,"cantidad":cantidad}
-    enviar(sckt,pag,json.dumps(arg))
-    nombre,mensaje=bus(sckt)
-    mensaje=json.loads(mensaje)
-    print(mensaje["respuesta"])
+    arg={}
+    enviar(sckt, pag, arg)
+    nombre_servicio, mensaje = escuchar(sckt)
+    mensaje = json.loads(mensaje[12:])
+    if
 
 if __name__ == "__main__":
     try:

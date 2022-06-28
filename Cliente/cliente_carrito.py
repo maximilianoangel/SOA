@@ -1,10 +1,11 @@
 import socket, sys, json
 from os import system, name
-from db import db
+from SOA.Servicios.pagar import enviar,bus
 
 
 servicio1 = 'carri'
-servicio2 = 'pagos'
+servicio2 = 'bcart'
+servicio3= 'pagar'
 
 def enviar(sckt, servicio, arg):
     if len(servicio) < 5 or len(arg) < 1:
@@ -55,6 +56,16 @@ def menu_cliente():
         print('Opcion no valida')
         menu_cliente()
 
+
+def realizar_pago(ID,pago,id_producto,cantidad):
+    arg={"id":ID,"pago":pago,"producto":id_producto,"cantidad":cantidad}
+    enviar(sckt, servicio3, arg)
+    nombre_servicio, mensaje = escuchar(sckt)
+    mensaje = json.loads(mensaje[12:])
+    if mensaje["respuesta"] == 'Pago realizado con exito!':
+        print("Pago realizado con exito")
+    else:
+        print("No se pudo completar el pago")
 
 
 def menu_listar_productos():
