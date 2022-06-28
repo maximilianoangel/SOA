@@ -4,7 +4,7 @@ import socket
 servicio1 = 'sensn'
 servicio2 = 'pagar'
 servicio3 = 'bcart'
-ID = None
+ID_usuario = ''
 
 def enviar(sckt, servicio, arg):
     if len(servicio) < 5 or len(arg) < 1:
@@ -118,6 +118,7 @@ def menu_registro_usuario():
 def menu_inicio_sesion():
     correo = None
     password = None
+    global ID_usuario
 
     menu1 = """
     ***************************************
@@ -156,7 +157,7 @@ def menu_inicio_sesion():
             enviar(sckt, servicio1, arg)
             nombre_servicio, mensaje = escuchar(sckt)
             mensaje = json.loads(mensaje[12:])
-            ID = mensaje["id"]
+            ID_usuario = mensaje["id"]
             print("Sesión iniciada con éxito.")
             menu_cliente()
 
