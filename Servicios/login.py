@@ -44,6 +44,19 @@ def registrar(sckt, servicio, data):
     print('Usuario registrado: ', data['correo'])
     enviar(sckt, servicio, json.dumps(response))
 
+def id(sckt, servicio, data):
+    crsr = db.cursor()
+    crsr.execute("SELECT id_usuario FROM `usuarios` WHERE `correo` LIKE %s", (data['correo'],))
+    respuesta = crsr.fetchone()
+    if len(respuesta) == 0:
+        response = {"respuesta": "OK", "id": respuesta[0]}
+        print('ID obtenido: ', respuesta[0])
+        enviar(sckt, servicio, json.dumps(response))
+    else:
+        response = {"respuesta": "ERROR"}
+        print('ID no obtenido: ', data['correo'])
+        enviar(sckt, servicio, json.dumps(response))
+
 if __name__ == "__main__":
     servicio = 'sensn'
     try:
@@ -71,7 +84,11 @@ if __name__ == "__main__":
         data = json.loads(data)
         if data['opcion'] == 'login':
             login(sckt, servicio, data)
-        else:
+        elif data['opcion'] == 'registrar':
             registrar(sckt, servicio, data)
+        elif data['opcion'] == 'id':
+            id(sckt, servicio, data)
+        else:
+            print('Opcion no valida')
     
     

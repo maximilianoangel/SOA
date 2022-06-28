@@ -2,9 +2,6 @@ import json
 import socket 
 
 servicio1 = 'sensn'
-servicio2 = 'pagar'
-servicio3 = 'bcart'
-ID = None
 
 def enviar(sckt, servicio, arg):
     if len(servicio) < 5 or len(arg) < 1:
@@ -29,32 +26,32 @@ def escuchar(sckt):
 def menu_inicial():
     menu = """
     ***************************************
-    * Usuario Cliente                     *
+    * Usuario Vendedor                    *
     *-------------------------------------*
     * Elija una opción:                   *
-    * 1) Registrar usuario                *
-    * 2) Ingresar usuario                 *
+    * 1) Registrar vendedor               *
+    * 2) Ingresar usuario vendedor        *
     ***************************************
 
     Opción: """
     option = input(menu)
     if option == "1":
-        menu_registro_usuario()
+        menu_registro_vendedor()
     elif option =="2":
         menu_inicio_sesion()
     else:
         print("Opción ingresada no válida.")
         menu_inicial()
 
-def menu_registro_usuario():
+def menu_registro_vendedor():
     nombre = None
     correo = None
     password = None
-    tipo = 'cliente'
+    tipo = 'vendedor'
 
     menu1 = """
     ***************************************
-    * Usuario administrador               *
+    * Usuario vendedor                    *
     *-------------------------------------*
     * Registro de usuario                 *
     * Ingresar nombre de usuario          *
@@ -65,7 +62,7 @@ def menu_registro_usuario():
 
     menu2 = """
     ***************************************
-    * Usuario administrador               *
+    * Usuario vendedor                    *
     *-------------------------------------*
     * Registro de correo                  *
     * Ingresar su correo                  *
@@ -76,7 +73,7 @@ def menu_registro_usuario():
 
     menu2 = """
     ***************************************
-    * Usuario administrador               *
+    * Usuario vendedor                    *
     *-------------------------------------*
     * Registro de usuario                 *
     * Ingresar contraseña                 *
@@ -87,7 +84,7 @@ def menu_registro_usuario():
 
     menu3 = f"""
     ***************************************
-    * Usuario administrador               *
+    * Usuario vendedor                    *
     *-------------------------------------*
     * Registro de usuario                 *
     * Confirme sus datos [y/n]            *
@@ -111,9 +108,9 @@ def menu_registro_usuario():
                 menu_inicial()
             else:
                 print("No se ha podido registrar el usuario.")
-                menu_registro_usuario()
+                menu_registro_vendedor()
     else:
-        menu_registro_usuario()
+        menu_registro_vendedor()
 
 def menu_inicio_sesion():
     correo = None
@@ -121,7 +118,7 @@ def menu_inicio_sesion():
 
     menu1 = """
     ***************************************
-    * Usuario administrador               *
+    * Usuario vendedor                    *
     *-------------------------------------*
     * Inicio de sesión                    *
     * Ingresar su correo                  *
@@ -132,7 +129,7 @@ def menu_inicio_sesion():
 
     menu2 = """
     ***************************************
-    * Usuario administrador               *
+    * Usuario vendedor                    *
     *-------------------------------------*
     * Inicio de sesión                    *
     * Ingresar contraseña                 *
@@ -141,7 +138,7 @@ def menu_inicio_sesion():
     Contraseña: """
     password = str(input(menu2))
 
-    arg = {"correo": correo, "password": password, "tipo": "cliente", 'opcion': 'login'}
+    arg = {"correo": correo, "password": password, "tipo": "vendedor", 'opcion': 'login'}
     arg = json.dumps(arg)
     enviar(sckt, servicio1, arg)
     nombre_servicio, mensaje = escuchar(sckt)
@@ -151,21 +148,16 @@ def menu_inicio_sesion():
             print("No se ha podido iniciar sesión.")
             menu_inicio_sesion() 
         else:
-            arg = {"correo": correo, "tipo": "cliente", 'opcion': 'id'}
-            arg = json.dumps(arg)
-            enviar(sckt, servicio1, arg)
-            nombre_servicio, mensaje = escuchar(sckt)
-            mensaje = json.loads(mensaje[12:])
-            ID = mensaje["id"]
             print("Sesión iniciada con éxito.")
-            menu_cliente()
+            menu_vendedor()
 
-def menu_cliente():
+def menu_vendedor():
     pass
-    
+
 if __name__ == "__main__":
     try:
         sckt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
         server_address = ('localhost', 5000)
         print('Cliente: Conectandose a {} puerto {}'.format(*server_address))
         sckt.connect(server_address)

@@ -345,5 +345,3 @@ if __name__ == "__main__":
         print('No es posible la conexión al bus')
         quit()
     menu_inicial()
-    
-
