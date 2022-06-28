@@ -52,7 +52,7 @@ def agregar_producto(sckt,servicio, data):
         crsr.execute("SELECT id_orden FROM Orden WHERE id_usuario = %s AND estado = 'por pagar'", (data['id_usuario'],))
         id_orden = crsr.fetchone()
         crsr = db.cursor()
-        crsr.execute("INSERT INTO orden_producto (id_orden, id_producto,cantidad,subtotal) VALUES (%s, %s,%s,%s)", (id_orden, data['id_producto'],data['cantidad'],data['subtotal']))
+        crsr.execute("INSERT INTO orden_producto (id_orden, id_producto,cantidad,subtotal) VALUES (%s, %s,%s,%s)", (int(id_orden[0]), data['id_producto'],data['cantidad'],data['subtotal']))
         db.commit()
     else:
         crsr = db.cursor()
@@ -62,7 +62,7 @@ def agregar_producto(sckt,servicio, data):
         crsr.execute("SELECT id_orden FROM Orden WHERE id_usuario = %s AND estado = 'por pagar'", (data['id_usuario'],))
         id_orden = crsr.fetchone()
         crsr = db.cursor()
-        crsr.execute("INSERT INTO orden_producto (id_orden,id_producto,cantidad,subtotal) VALUES (%s, %s,%s,%s)", (id_orden,data['id_producto'],data['cantidad'],data['subtotal']))
+        crsr.execute("INSERT INTO orden_producto (id_orden,id_producto,cantidad,subtotal) VALUES (%s, %s,%s,%s)", (int(id_orden[0]),data['id_producto'],data['cantidad'],data['subtotal']))
         db.commit()
     response ={"respuesta": "OK"}
     print('Producto agregado a la orden.')
