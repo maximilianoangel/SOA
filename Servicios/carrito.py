@@ -109,7 +109,7 @@ def eliminar_producto(sckt, servicio, data):
     crsr.execute("SELECT id_orden FROM Orden WHERE id_usuario = %s AND estado = 'por pagar'", (data['id_usuario'],))
     id_orden = crsr.fetchone()
     crsr = db.cursor()
-    crsr.execute("DELETE FROM `orden_producto` WHERE `id_orden` = %s AND `id_producto` = %s AND `cantidad` = %s", (int(id_orden[0]), data['id_producto'], data['cantidad']))
+    crsr.execute("DELETE FROM `orden_producto` WHERE `id_orden` = %s AND `id_producto` = %s", (int(id_orden[0]), data['id_producto']))
     db.commit()
     response ={"respuesta": "OK"}
     print('Producto eliminado de la orden: ', data['id_producto'])

@@ -125,7 +125,7 @@ def menu_inicio_sesion():
 
     menu1 = """
     ***************************************
-    * Usuario administrador               *
+    * Usuario cliente                     *
     *-------------------------------------*
     * Inicio de sesión                    *
     * Ingresar su correo                  *
@@ -136,7 +136,7 @@ def menu_inicio_sesion():
 
     menu2 = """
     ***************************************
-    * Usuario administrador               *
+    * Usuario cliente                     *
     *-------------------------------------*
     * Inicio de sesión                    *
     * Ingresar contraseña                 *
@@ -366,15 +366,7 @@ def menu_eliminar_productos_carrito():
     ID_producto: """
     id_producto = input(menu)
 
-    menu1 = """
-    *********************************************************
-    *Modo usuario                                           *
-    *-------------------------------------------------------*
-    *Ingrese cantidad a eliminar                            *
-    
-    Cantidad: """
-    cantidad = input(menu1)
-    arg = {"opcion": "eliminar","id_usuario":ID_usuario ,"id_producto": id_producto, "cantidad": cantidad}
+    arg = {"opcion": "eliminar","id_usuario":ID_usuario ,"id_producto": id_producto}
     arg = json.dumps(arg)
     enviar(sckt, servicio2, arg)
     nombre_servicio, mensaje = escuchar(sckt)
